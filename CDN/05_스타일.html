@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>vue에서 스타일 적용하기</title>
+    <script src="https://unpkg.com/vue"></script>
+    <style>
+      .test1 {
+        background-color: aqua;
+        color: violet;
+      }
+      .test2 {
+        font-size: 20px;
+        font-weight: bolder;
+      }
+      .color {
+        color: blue;
+      }
+      .background {
+        background-color: yellow;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <h2>인라인스타일 적용하기</h2>
+      <p>
+        v-bind:style,:style을 이용해서 스타일을 적용<br />
+        속성값을 문자열, 객체로 설정할 수 있음<br />
+        문자열 : css속성=속성값;css속성=속성값....<br />
+        객체 : {css속성:"속성값",css속성:"속성값"...}<br />
+        style태그는 mounted된 태그 내부에 사용할 수 없다<br />
+      </p>
+      <h3>문자열로 스타일 적용하기</h3>
+      <div
+        style="border: 1px solid red; color: magenta; width: 50%; height: 100px"
+      ></div>
+      <div :style="basicStyle"></div>
+      <button @click="changeStyle">변경하기</button>
+
+      <h3>객체로 스타일 적용하기</h3>
+      <div :style="objStyle"></div>
+      <input type="text" v-model.trim="objStyle.width" />
+      <button @click="changeStyle2">객체 변경하기</button>
+
+      <h3>클래스속성으로 스타일 적용</h3>
+      <h4 class="test1 test2">기본 html방식으로 스타일 적용</h4>
+      <h4 :class="style.classes.a">클래스를 이용해서 스타일 적용하기</h4>
+      <p :class="style.classes.b">클래스를 이용해서 스타일 적용하기</p>
+      <p :class="[style.classes.c,style.classes.d]">
+        클래스를 이용해서 스타일 적용하기
+      </p>
+    </div>
+    <script>
+      const model = {
+        basicStyle:
+          "border: 1px solid red; color: magenta; width: 50%; height: 100px",
+        objStyle: {
+          border: "1px solid pink",
+          backgroundColor: "magenta",
+          width: "80%",
+          height: "200px",
+        },
+        style: {
+          classes: {
+            a: "test1",
+            b: "test2",
+            c: "color",
+            d: "background",
+          },
+        },
+      };
+
+      Vue.createApp({
+        name: "styleApp",
+        data() {
+          return model;
+        },
+        methods: {
+          changeStyle() {
+            this.basicStyle = "background-color:lime;width:100%;height:60px";
+          },
+          changeStyle2() {
+            this.objStyle = { ...this.objStyle, backgroundColor: "lime" };
+          },
+          checkbox: {
+            color: false,
+            background: false,
+          },
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>

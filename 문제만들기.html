@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>문제만들기</title>
+    <script src="https://unpkg.com/vue@3"></script>
+  </head>
+  <body>
+    <div id="score">
+      <label
+        >점수 :
+        <input type="number" v-model="score" :class="{'input-error' : minus }"
+      /></label>
+      <span v-if="minus" style="color: red">점수가 마이너스 입니다.</span>
+      <h3>숫자가 {{score}} 올라갑니다</h3>
+    </div>
+    <div id="todoList">
+      <h3>todoList만들기</h3>
+      <input type="text" placeholder="할일을 적어주세요" v-model="work" />
+      <button @click="addWork">추가</button>
+      <table>
+        <tr v-for="(w,index) in list">
+          <td>{{w}}<button @click="deletework(index)">삭제</button></td>
+        </tr>
+      </table>
+    </div>
+  </body>
+  <script>
+    const model = {
+      score: 0,
+    };
+    Vue.createApp({
+      name: "score",
+      data() {
+        return model;
+      },
+      computed: {
+        minus() {
+          return this.score < 0;
+        },
+      },
+    }).mount("#score");
+
+    const model2 = {
+      list: ["밥먹기", "잠자기", "웃기"],
+      work: "",
+    };
+
+    Vue.createApp({
+      name: "todoList",
+      data() {
+        return model2;
+      },
+      methods: {
+        addWork() {
+          this.list.push(this.work);
+          this.work = "";
+        },
+        deletework(index) {
+          this.list.splice(index, 1);
+        },
+      },
+    }).mount("#todoList");
+  </script>
+  <style>
+    .input-error {
+      background-color: #ffebee; /* 옅은 붉은색 */
+      border: 1px solid #e57373;
+    }
+  </style>
+</html>

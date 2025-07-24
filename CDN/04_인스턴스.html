@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>인스턴스 추가속성들</title>
+    <script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+    <h2>vue인스턴스</h2>
+    <p>
+        Vue객체가 제공하는 createApp()함수를 이용해서 생성한 객체<br>
+        createApp()함수의 매개변수에 객체를 전달하게됨.<br>
+        매개변수 객체설정 key들을 추가 속성
+        name : 인스턴스의 이름
+        methods : 페이지내부에서 사용할 메소드(기능) -> 객체타입
+        data : 페이지내부에서 사용할 데이터 -> 함수타입
+        computed : 계산된 값을 의미, data에서 반환하는 값을 계산해서 처리할때 캐싱처리하여 한번만 계산해서 활용할 수 있게 해줌. -> 객체타입
+        watch : data에서 반환하는 특정 값을 추적관리하는 설정 -> 객체타입
+        lifecycle함수들 : 페이지가 구성되는 주기에 따라 특정 로직을 실행할 수 있게 해주는 함수들....
+
+        props, components, provide, inject속성도 있음
+    </p>
+    <script>
+        const vue=Vue.createApp();
+        console.log(vue);
+        console.log(vue.config);
+        console.log(vue._component);
+        console.log(vue.directive);
+    </script>
+    <div id="app">
+        <h2>methods속성</h2>
+        <p>
+            일반함수, 이벤트핸들러 지정하는 속성<br>
+            함수를 선언할때는 function(){}(고전방식이용)<br>
+            data에서 반환하는 값을 가져올때는 this예약어를 이용한다.<br>
+        </p>
+        <h2>computed속성</h2>
+        <p>
+            특정값을 반환하는 함수를 설정<br>
+            반환하는 값을 캐싱처리함, 페이지에서 호출하더라도 함수를 실행하지 않고 값을 가져올 수 있음.<br>
+        </p>
+        <h3>일반함수를 이용해서 값을 가져오기</h3>
+        <div>
+            <p>{{printStr()}}</p>
+            <p>{{printStr()}}</p>
+            <p>{{printStr()}}</p>
+            <p>{{printStr()}}</p>
+        </div>
+        <h3>computed를 이용해서 값을 가져오기</h3>
+        <div>
+            <p>{{printComputed}}</p>
+            <p>{{printComputed}}</p>
+            <p>{{printComputed}}</p>
+            <p>{{printComputed}}</p>
+        </div>
+        <h3>계산한 결과를 가져오기</h3>
+        <div>
+            <input type="number" v-model.number="num">
+            <p>1부터 입력한 값까지 합계를 출력 : {{sum}}</p>
+            <p>1부터 입력한 값까지 합계를 출력 : {{sum}}</p>
+            <p>1부터 입력한 값까지 합계를 출력 : {{sum}}</p>
+            <p>1부터 입력한 값까지 합계를 출력 : {{sum}}</p>
+        </div>
+    </div>
+    <script>
+        Vue.createApp({
+            name:"extraAtt",
+            data(){
+                return {
+                    num:0,
+                }
+            },methods:{
+                printStr(){
+                    console.log("printStr실행");
+                    return "일반함수 실행";
+                }
+            },computed:{
+                printComputed(){
+                    console.log("printComputed실행");
+                    return "computed함수 실행";
+                },
+                sum(){
+                    console.log("sum()함수 실행");
+                    let total=0;
+                    for(let i=0;i<this.num;i++){
+                        total+=(i+1);
+                    }
+                    return total;
+                }
+            }
+        }).mount("#app");
+    </script>
+
+    <div id="app2">
+        <h3>watch속성</h3>
+        <p>
+            연결된 데이터를 감지하는 속성<br>
+            데이터변경시에 실행될 로직이 있으면 설정<br>
+            연결할 데이터의 key값과 일치하는 함수나 객체를 선언<br>
+        </p>
+        <h3>단일값 watch처리하기</h3>
+        <p>{{watchData}}</p>
+        <input type="text" v-model.trim="watchData">
+        <h3>객체 데이터 watch처리하기</h3>
+        <input type="text" v-model="person.name" placeholder="이름"><br>
+        <input type="text" v-model="person.age" placeholder="나이"><br>
+        <input type="text" v-model="person.gender" placeholder="성별"><br>
+        <button @click="makePerson">변경</button>
+        <p>{{person.name}} {{person.age}} {{person.gender}}</p>
+    </div>
+    <script>
+        Vue.createApp({
+            name:"watchTest",
+            data(){
+                return {watchData:"",person:{}};
+            },
+            methods:{
+                makePerson(){
+                    this.person={name:"",age:0,gender:""}
+                }
+            },
+            watch:{
+                //현재값, 이전값을 매개변수로 전달받음
+                watchData2(curVal,preVal){
+                    console.log(`현재 ${curVal} / 이전 ${preVal}`);
+                },
+                // person:function(c,p){
+                //     console.log(`${c} ${p}`);
+                // }
+                person:{
+                    handler:function(c,p){
+                        // console.log(`${c} ${p}`);
+                        console.log(c);
+                        console.log(p);
+                    },
+                    //객체의 속성이 변경했을때 동작여부를 설정
+                    deep:true,
+                }
+            }
+        }).mount("#app2");
+    </script>
+
+    <h3>생명주기함수 이용하기</h3>
+    <p>
+         beforeCreate, created, beforeUpdate, updated,
+         beforeMount, mounted, beforeUnmount, unmounted
+    </p>
+    <div id="app3">
+        <input type="text" v-model="test">
+        <p>{{test}}</p>
+    </div>
+    <script>
+        Vue.createApp({
+            name:"lifecycleTest",
+            data(){
+                return {test:""};
+            },
+            methods:{
+                testFunc(){
+                    console.log("testfunc");
+                }
+            },
+            beforeCreate(){
+                //잘 사용하지 않음
+                console.log("beforeCreate함수 실행!");
+                console.log(this);
+                console.log(this.test);
+                console.log(this.testFunc);
+            },
+            created(){
+                console.log("created함수 실행!");
+                console.log(this);
+                console.log(this.test);
+                // console.log(this.testFunc);
+                this.testFunc();
+            },
+            beforeMount(){
+                console.log("beforeMount함수 실행~");
+                console.log(this);
+            },
+            mounted(){
+                console.log("mounted함수 실행");
+            },
+            beforeUpdate(){
+                //변경되기 전 값을 출력
+                console.log("beforeUpdate함수 실행");
+                console.log(this.test);
+            },
+            updated(){
+                //변경된 후 값을 출력
+                console.log("updated함수 실행");
+                console.log(this.test);
+            }
+
+
+        }).mount("#app3");
+    </script>
+
+
+    <div id="app4">
+        <h2>최신뉴스~</h2>
+        <input type="text" v-model="inputCategory">
+        <span style="color:red" v-show="notCategory">카테고리에 없는 값입니다.</span>
+        <!--
+            category=all(없음)||business||entertainment||health||sports||technology 
+            input태그에 한글로 전체, 경제, 연예, 건강, 스포츠, 기술이라고 입력하면
+            뉴스 조회하기
+            로딩화면 처리하기
+        -->
+        <div id="news-container">
+            <div v-show="isNewsLoading">
+                <h2>로딩중.......</h2>
+            </div>
+            <ul>
+                <li v-for="article in newsData">
+                    <img :src="article.urlToImage" width="100px" alt="섬네일">
+                    <a :href="article.url" 
+                    @click.prevent="openArticle(article.url)">{{article.title}}</a>
+                    <!-- <h3>{{article.title}}</h3>
+                    <p>{{article.description}}</p> -->
+                </li>
+            </ul>
+        </div>
+    </div>
+    <br><br><br><br><br><br><br><br><br><br>
+    <script>
+        const model={
+            // newsData:{news:[],isLoading:flase},
+            newsData:[],
+            isNewsLoading:false,
+            inputCategory:"",
+            notCategory:false,
+        }
+        Vue.createApp({
+            name:"newsApp",
+            data(){
+                return model;
+            },methods:{
+                openArticle(url){
+                    open(url,"_target","width=500,height=800");
+                },
+                async requestNews(cate){
+                    this.isNewsLoading=true;
+                    const response=await fetch(`http://localhost:9999/news?param=${cate}`);
+                    if(response.ok){
+                        const data=await response.json();
+                        console.log(data);
+                        this.newsData=data.articles;
+                    }else{
+                        alert("뉴스정보를 가져오지 못 했습니다. :p)");
+                    }
+                    this.isNewsLoading=false;
+                }
+            },
+            async mounted(){
+                setTimeout(async ()=>{
+                    this.requestNews("all");
+                },3000);
+            },
+            watch:{
+                inputCategory(curVal,preVal){
+                    console.log(curVal);
+                    const category={
+                        "전체":"all",
+                        "경제":"business",
+                        "연예":"entertainment",
+                        "건강":"health",
+                        "스포츠":"sports",
+                        "기술":"technology"
+                    }
+                    if(Object.keys(category).includes(curVal)){
+                        this.notCategory=false;
+                        this.requestNews(category[curVal]);
+                    }else
+                        this.notCategory=true;
+                }
+            }
+        })
+        .mount("#app4");
+    </script>
+
+
+
+</body>
+</html>

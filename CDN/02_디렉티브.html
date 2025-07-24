@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>디렉티브 활용하기</title>
+    <script src="http://unpkg.com/vue" type="text/javascript"></script>
+</head>
+<body>
+        <style>
+            .my-style{
+                background-color: magenta;
+            }
+            .my-font{
+                font-size: 20px;
+                font-weight: bolder;
+            }
+        </style>
+    <div id="app">
+        <h2>보간법/콧수염표기범 사용</h2>
+        <p>
+            vue에서 정의한 데이터를 화면에 출려할때 사용
+        </p>
+        <h3>vue에서 제공하는 데이터를 출력하기</h3>
+        <p>일반문구 출력 : {{message}}</p>
+        <p>html로 작성한 문구 출력 : {{htmlText}}</p>
+        <h3>숫자형 데이터 이용하기</h3>
+        <p>su : {{su}} su2 : {{su2}}</p>
+        <p>연산자 활용 : su*su2 = {{su*su2}}</p>
+
+        <h3>객체 활용하기</h3>
+        <p>배열 : {{ names }} / 단일값 접근 : {{names[0]}}</p>
+        <p>객체 : {{ obj }} / 단일값 접근 : {{obj.name}}</p>
+
+        <h3>함수 호출하기</h3>
+        <p>문자열길이 : {{message.length}}</p>
+        <p>문자열 자르기 : {{message.substring(0,4)}}</p>
+        <p>배열 함수 : {{ names.filter(e=>e.length>4)}}</p>
+        <p>모델제공 함수 : {{testFunc()}}</p>
+
+        <h3>디렉티브 속성 이용하기</h3>
+        <p>
+            화면을 구성할때 필요한 기능을 제공하는 속성<br>
+            태그에 v-을 붙인 속성을 설정하면 기능이 수행됨. <br>
+        </p>
+        <h4>화면에 특정문구를 출력하는 속성</h4>
+        <p>
+            v-text, v-html
+        </p>
+        <p>메세지 : {{message}}</p>
+        <p v-text="message"></p>
+        <p v-html="message"></p>
+        <p v-text="htmlText"></p>
+        <p v-html="htmlText"></p>
+        <p v-text="'메시지 : ' + message"></p>
+
+        <h3>v-pre</h3>
+        <p>보간법을 해석하지 않음</p>
+        <p>
+            {{message}}
+        </p>
+        <p v-pre>{{message}}{{htmlText}}</p>
+        <p v-text="message"></p>
+        <p v-pre v-test="message"></p>
+        <p v-pre>안녕 나는 문구야!</p>
+
+        <h3>v-bind</h3>
+        <p>
+            html이 가지고 잇는 속성에 데이터(model)를 연결할때 사용<br>
+            v-bind : 속성명 ="속성값"<br>
+            :속성명 = "속성값" <br>
+        </p>
+        <img src="https://img2.sbs.co.kr/img/seditor/VD/2023/05/24/cki1684893587443-640-0.jpg" width="200px">
+        <img v-bind:src="imgSrc" v-bind:width="imgWidth"><br>
+        <img :src="imgSrc" :width="imgWidth"><br>
+
+        <h4>v-bind로 전체 속성 한번에 저장하기</h4>
+        <input type="radio" name="gender" value="M">남 
+        <input type="radio" name="gender" value="F">여
+        <input v-bind="myRadio" value="M">남
+        <input v-bind="myRadio" value="F">여
+
+        
+
+        <h4>class속성 처리하기</h4>
+        <span class="my-style">클래스 속성으로 스타일 적용</span>
+        <span :class="mystyle">v-bind 클래스 속성 설정하기</span>
+        <span :class="[mystyle,myfont]">두개 model과 연결하기</span>
+
+        <h3>v-on</h3>
+        <p>
+            태그에 이벤트 핸들러 등록하기 디렉티브<br>
+            v-on: 이벤트명 <br>
+            @이벤트명 <br>
+            속성값은 함수이름을 설정<br>
+            methods에 설정된 함수명을 선언<br>
+        </p>
+        <h4>기본 이벤트 등록하기</h4>
+        <button v-on:click="basicEvent">v-on으로 등록하기</button>
+        <button @dblclick="basicEvent">@로 등록하기</button>        
+
+        <h4>이벤트 인라인방식으로 등록하기</h4>
+        <input type="text" v-on:change="function(e){console.log(e);console.log(this)}"> <br>
+        <input type="text" @keyup="console.log(e);console.log(this);">
+
+        <h4>로직만 작성한 후 이벤트 객체 불러오기</h4>
+        <input type="text" @kepup = "console.log($event);console.log($event.target.value);console.log($event.key)">
+
+        <h4>이벤트 핸들러와 model값 연동하기</h4>
+        <input type="text" @keyup="inputDataHandler">
+        <h3>입력값 : {{inputData}}</h3>
+
+        <h4>이벤트 속성에 수식어 이용하기</h4>
+        <p>space 누르면 이벤트 발생</p>
+        <input type="text" @keyup.space="e=>{console.log('space눌러서실행!');}"> <br>
+        <p>enter 누르면 이벤트 발생</p>
+        <input type="text" @keyup.enter="e=>{console.log('enter눌러서실행!');}"> <br>
+        <p>기본이벤트 차단하기</p>
+        <a href="/test" @click.prevent="(e)=>{console.log('이동 xx');}">a태그 요청하기</a>
+        <p>우클릭 이벤트 차단하기</p>
+        <button @click.right.prevent="(e)=>{console.log('버튼에서 우클릭!');
+        this.rightclick='우클릭 xx'}">우클릭해봐</button>
+        <span>{{rightclick}}</span>
+        <p>윈도우 키, cmd 키를 누르고 클릭했을때 이벤트 발생</p>
+        <button @click.meta="console.log('특수키 누르고 실행!')">win/cmd키</button>
+        
+        <h3>v-model</h3>
+        <p>
+            태그와 데이터를 연동해서 처리할 때 사용<br>
+            주로 input태그와 연동! <br>
+        </p>
+        <h4>input type = text와 연동</h4>
+        <input type="text" v-model="inputData">
+
+        <h4>{{inputData}}</h4>
+
+        <h4>input type = checkbox</h4>
+        <p>
+            checkbox value속성을 설정 하지 않으면 연동된 데이터에 boolean을 저장 <br>
+            value값을 저장하면 value값을 연동된 model에 저장 <br>
+            checkbox가 다중으로 설정되면 연동된 model check된 valueㄹ,ㄹ 배열로 저장 <br>
+        </p>
+        <input type="checkbox" name="basicCheck" v-model="basicCheck">
+        <h4>basicCheck : {{basicCheck}}</h4> 
+
+        <input type="checkbox" name="basicCheck2" value="체크값" v-model="basicCheck2" >
+        <h4>basicCheck2 : {{basicCheck2}}</h4> 
+
+        <input type="checkbox" name="hobby" value="코딩" v-model="hobbies">코딩
+        <input type="checkbox" name="hobby" value="독서" v-model="hobbies">독서
+        <input type="checkbox" name="hobby" value="영화" v-model="hobbies">영화
+        <input type="checkbox" name="hobby" value="산책" v-model="hobbies">산책
+        <input type="checkbox" name="hobby" value="고양이영상" v-model="hobbies">고양이영상
+
+        <h4>취미는 : {{hobbies.join(",")}} </h4>
+        <!-- <ul>
+            <li v-for="(h,1) in hobbies">{{h}}</li>
+        </ul> -->
+
+        <h3>select 태그와 연동하기</h3>
+        <div>
+            <h3>카테코리 선택</h3>
+            <select name="category" id="category" v-model="searchData.category">
+                <option disabled value="">선택하세요</option>
+                <option value="title">제목</option>
+                <option value="content">내용</option>
+                <option value="writer">작성자</option>
+            </select>
+            <input type="text" v-model="searchData.keyword">
+            <p>선택된 카테고리 : {{searchData.category}} {{searchData.keyword}} </p>
+
+            <h4>textarea이용하기</h4>
+            <textarea cols="30" rows="10" v-model="info"></textarea>
+            <h4 v-text="info"></h4>
+
+
+            <!-- input 태그 2개 각각 이미지 주소, width값 받아서 입력받은 이미지를 입력받은 크기로 출력하기 -->
+
+            <label>이미지 주소 : <input type="text" v-model="imgSrc"></label>
+            <label>사이즈 : <input type="number" v-model="imgWidth"></label>
+            <img :src="imgSrc" :width="imgWidth">
+        </div>
+        <h4>v-model 수식어 사용하기</h4>
+        <input type="text" v-model.lazy="name">
+        <p>사용자 입력 : {{name}} </p>
+
+        <h4>number수식어</h4>
+        <input type = "text" v-model.number="su">
+        <input type = "text" v-model.number="su2">
+        <p>{{su+su2}}</p>
+
+        <h4>trim</h4>
+        <input type = "text" v-model.trim="message">
+        <pre>{{message}}</pre>
+    </div>
+    <script>
+        Vue.createApp({
+            name:"App",
+            data(){
+                return {
+                    message:"안녕 Vue",
+                    htmlText:"<mark>이건 무슨 태그 ?</mark>",
+                    su:10,su2:20,
+                    names: ["유병승","BSLOVE","김경주","박세웅","윤우식"],
+                    obj:{name : "갤럭시폴드7",
+                        price : 2_300_000
+                    },
+                    testFunc:function(){
+                        return "model함수 출력결과!";
+                    },
+                    imgSrc : "https://img2.sbs.co.kr/img/seditor/VD/2023/05/24/cki1684893587443-640-0.jpg",
+                    imgWidth:"300px",
+                    myRadio:{"type":"radio","name":"gender","id":"gender","class":"input"},
+                    mystyle:"my-style",
+                    myfont:"my-font",
+                    inputData:"초기값을 설정하기",
+                    rightclick:"",
+                    basicCheck:"",
+                    basicCheck2:[],
+                    hobbies:[],
+                    // category:"",
+                    // keyword:"",
+                    searchData:{
+                        category : "",
+                        keyword : ""
+                    },
+                    info:"",
+                    name:"",
+                
+                }
+            },
+            methods:{
+                basicEvent:function(e){
+                    console.log(e);
+                    alert('이벤트실행');
+                    e.target.innerText="변경하기";
+                },
+                inputDataHandler: function(e){
+                    const inputValue = e.target.value;
+                    // data에서 제공하는 변수에 접근
+                    // this.key값
+                    this.inputData = inputValue;
+                }
+            }
+        }).mount("#app");
+
+
+    </script>
+</body>
+</html>

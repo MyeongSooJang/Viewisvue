@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제어문 활용하기</title>
+    <script src="https://unpkg.com/vue" type="text/javascript"></script>
+    <style>
+        [v-cloak]
+        {display: none;}
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h2>조건문 디렉티브 활용하기</h2>
+        <h3>v-show : 조건에 따라 태그를 화면에 출력할지 결정하는 디렉티브</h3>
+        <p>
+            v-show : boolean형을 설정, true/false <br>
+            true : display:block || inline-block || inline <br>
+            false : display:none<br>
+        </p>
+        <label><input type="checkbox" v-model="flag"> 선택 :)</label>
+        <h3 v-show="flag">나는 유병승</h3>
+        <input type="text" v-model="test">
+        <h3 v-show="test.length>=3">{{test}}</h3> <br>
+
+        <!-- 급여를 입력받고 입력받은 급여가 400만원 이상이면 많이 받으시네요 출력 -->
+
+        <label><input type="number" v-model.number="salary" step="100000" min="2100000">월급</label> <br>
+        <h4 v-show="salary>=4000000">월급은 {{salary}} 입니다.</h4><br>
+
+        <!-- 비밀번호 확인가능 만들기
+             비밀번호가 일치하지 않을때만 "일치하지 않습니다."를 빨강색으로 출력 -->
+
+        <label>비밀번호 : <input type="password" v-model="password"></label> <br>
+        <label>비밀번호확인 : <input type="password" v-model="passwordCheck"></label> <br>
+        <h4 v-show="password!=passwordCheck" style="color: red;">비밀번호 불일치!</h4>
+
+        <h3>v-if 디렉티브 이용하기</h3>
+        <p>
+            v-if 속성에는 boolean을 설정 <br>
+            태그를 출력하지 않는다. <br>
+            v-else-if 속성
+            v-else 속성
+        </p>
+
+        <h4 v-if="flag">이거 출력하기</h4>
+        <h4 v-if="salary>3000000">기본급여는 받고 있어용가리</h4>
+        <h4 v-else-if="salary>250000">힘내용</h4>
+        <h4 v-else>else문</h4>
+
+        <!-- 비밀번호가 일치하면 일치합니다, 일치하지 않으면 일치하지 않습니다. -->
+
+        <h3>비밀번호 예제2</h3>
+        <h4 v-if="password==''|| passwordCheck==''">공백 시러ㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓㅓ</h4>
+        <h4 v-else-if="password!=passwordCheck">틀려어ㅓㅓㅓㅓㅓㅓㅓㅓㅓ</h4>
+        <h4 v-else>마자ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ</h4>
+
+        <h3>반목문 이용하기</h3>
+        <h4>v-for디렉티브 이용하기</h4>
+        <p>
+            v-for="() in 숫자" -> 기본 for 문 <br>
+            v-for="(변수명,index) in 배열" -> 배열을 순회 <br>
+            v-for="(value,key) in object" -> 객체를 순회 <br>
+            for문으로 태그를 반복해서 생성했을때는 추가속성을 설정해야함 <br>
+            : key속성 -> 중복되지 않은 값으로 설정
+        </p>
+        <h3>기본반복문 사용하기</h3>
+        <ul>
+            <!-- <li v-for="i in 5" : key="1">{{i}}</li> -->
+             <li v-for="i in 5" v-text="i+1"></li>
+        </ul>
+        <h3>배열에 저장된 값 출력하기</h3>
+        <h4>나의 아이템</h4>
+        <ul>
+            <li v-for="item in items" :key="item">{{item}}</li>
+        </ul>
+        <ul>
+            <li v-for="(item,index) in items" :key="`${index}_${item}`">{{index+1}}{{item}}</li>
+        </ul>
+        <h3>객체 출력하기</h3>
+        <ul>
+            <li v-for="(value,key) in person">{{key}} : {{value}}</li>
+        </ul>
+
+        <h3>상품리스트</h3>
+        <table>
+            <thead>
+                <tr>
+                <!-- <th v-for="(v,title) in products[0]" v-text="title"></th> -->
+                <th>상품명</th>
+                <th>가격</th>
+                <th>브랜드</th>
+                <th>색상</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="product in products">
+                    <td>{{product.name}}</td>
+                    <td>{{product.price}}</td>
+                    <td>{{product.brand}}</td>
+                    <td>{{product.color}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div id="input-container">
+            <input type="text" placeholder="상품명" v-model="productname"><br>
+            <input type="text" placeholder="가격" v-model="productprice"><br>
+            <input type="text" placeholder="브랜드" v-model="productbrand"><br>
+            <input type="text" placeholder="색상" v-model="productcolor"><br>
+            <button @click="addProduct">저장</button>
+        </div>
+
+    </div>
+    <script>
+        const model={flag:false,test:"",salary:"0",password:"",passwordCheck:"",items:["포션","검","도끼","표창","지팡이"]
+            ,person:{"name":"유병승","nickName":"BSLOVE","age":19,"address":"경기도 시흥시"},
+            products:[{name:"맥미니",price:800000,brand:"Apple",color:"spacegray"},
+                    {name:"갤럭시폴드7",price:2300000,brand:"삼성",color:"black"},
+                    {name:"맥북프로",price:5000000,brand:"Apple",color:"spacegray"},
+                    {name:"스텐바이미",price:1200000,brand:"LG",color:"white"}
+
+    
+        ],addproduct:{name:"",price:0,brand:"",color:""}
+        }
+        
+        
+
+        Vue.createApp({
+            name : "control",
+            data(){
+                return model
+            },
+            methods:{
+                addProduct:function(){
+                    this.products.push({
+                        name: this.productname,
+                        price: this.productprice,
+                        brand: this.productbrand,
+                        color: this.productcolor
+                    });
+                     // 입력 필드 초기화
+                    this.productname = "";
+                    this.productprice = 0;
+                    this.productbrand = "";
+                    this.productcolor = "";
+                },
+                addProduct1:function(e){
+                    this.products.push(this.inputProduct);
+                },
+            },
+        }).mount('#app');
+    </script>
+
+    <div id="app2">
+        <h3>v-once : 데이터를 한번만 불러와 출력 -> readOnly값으로 수정해도 변경되지 않음</h3>
+        <p v-once>{{oneData}}</p>
+        <input type="text" v-model="oneData">
+        <p>{{oneData}}</p>
+
+        <h3>동적으로 속성데이터 처리하기</h3>
+        <img : [img.src]="img.path":[img:width]="img.wValue"><br>
+
+        <h3>v-cloak : 보간법으로 표시한 내용이 출력되지 않게 설정하는 </h3>
+        <p>
+            스타일 태그에 안보이게 설정 -> display noen;
+        </p>
+
+
+
+
+    </div>
+    <script>
+        const model2 = {oneData : "변하지 않아!", img:{
+            src:"src",path:"https://recipe1.ezmember.co.kr/cache/recipe/2022/07/30/fd7022b4b639b36832762d20c8f935181.jpg",
+            width:"width",wValure:"200px"
+        }}
+        Vue.createApp({
+            name:"app2",
+            data(){
+                return model2;
+            }
+        }).mount("#app2");
+    </script>
+
+</body>
+</html>

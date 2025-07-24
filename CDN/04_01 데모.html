@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>데모 가지고 오기</title>
+    <script src="https://unpkg.com/vue"></script>
+  </head>
+  <body>
+    <h2>Demo요청 데이터 받아서 테이블로 출력하기</h2>
+    <div id="demoContainer">
+      <label>나이 : <input type="text" v-model="demo.devAge" /></label> <br />
+      <label>이메일 : <input type="text" v-model="demo.devEmail" /></label
+      ><br />
+      <label>성별 : <input type="text" v-model="demo.devGender" /></label><br />
+      <label>언어 : <input type="text" v-model="demo.devLang" /></label><br />
+      <label>이름 : <input type="text" v-model="demo.devName" /></label> <br />
+
+      <button @click="saveDemo">저장하기</button>
+      <table>
+        <thead>
+          <tr>
+            <th>번호</th>
+            <th>이름</th>
+            <th>나이</th>
+            <th>이메일</th>
+            <th>성별</th>
+            <th>언어</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="demo in demosData">
+            <td>{{demo.devNo}}</td>
+            <td>{{demo.devName}}</td>
+            <td>{{demo.devAge}}</td>
+            <td>{{demo.devEmail}}</td>
+            <td>{{demo.devGender}}</td>
+            <td>{{demo.devLang}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <script>
+      Vue.createApp({
+        name: "demoTest",
+        data() {
+          return {
+            demosData: [],
+            demo: {
+              devName: "",
+              devAge: 0,
+              devEmail: "",
+              devGender: "",
+              devLang: [],
+            },
+          };
+        },
+        async mounted() {
+          const response = await fetch(`http://localhost:9999/demos`);
+          if (response.ok) {
+            const data = await response.json();
+            console.log(data);
+            this.demosData = data;
+          } else {
+            alert("데모가 어디있나요..?");
+          }
+        },
+        methods: {
+          async saveDemo() {
+            this.demo.devLang = this.demo.devLang.split(",");
+
+            const response = await fetch(`http://localhost:9999/demos`, {
+              method: "post",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(this.demo),
+            });
+            if (response.ok) {
+              const data = await response.json();
+              console.log(data);
+            } else {
+              alert("데모 저장실패..!");
+            }
+          },
+        },
+      }).mount("#demoContainer");
+    </script>
+  </body>
+</html>
