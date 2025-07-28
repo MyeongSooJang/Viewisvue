@@ -1,7 +1,8 @@
 <template>
   <div>
     <label>
-      <input type="checkbox" v-model="check" :value="title" />{{ title }}
+      <input type="checkbox" v-model="check" :value="title" />
+      {{ title }}
     </label>
   </div>
 </template>

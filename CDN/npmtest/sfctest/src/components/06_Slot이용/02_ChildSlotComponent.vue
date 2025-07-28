@@ -1,7 +1,15 @@
 <template>
   <div>
     <h3>전달받은 컴포넌트 출력</h3>
-    <slot></slot>
+    <div id="data-container">
+      <div>
+        <h2>입력창</h2>
+      </div>
+      <div>
+        <h2>checkbox</h2>
+        <slot></slot>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -18,7 +26,7 @@ export default {
   justify-content: center;
   align-items: center;
 }
-#data-container > div:last-child {
+#data-container > div:first-child {
   width: 30%;
 }
 #data-container > div:last-child {
