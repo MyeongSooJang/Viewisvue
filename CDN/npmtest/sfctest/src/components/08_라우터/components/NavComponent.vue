@@ -22,6 +22,8 @@ const model = {
     { label: "router객체정보확인", link: "/router" },
     { label: "동적경로1", link: "/dynamicpath/1" },
     { label: "동적경로2", link: "/dynamicpath/2" },
+    { label: "쿼리스트링이용", link: "/querystring?team=토트넘&age=25&no=5" },
+    { label: "멤버리스트", link: "/memberList" },
   ],
 };
 export default {

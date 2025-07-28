@@ -12,6 +12,8 @@ import HomeComponent from "@/components/08_라우터/components/HomeComponent.vu
 import RouteInfoComponent from "@/components/08_라우터/components/RouteInfoComponent.vue";
 import RouterInfoComponent from "@/components/08_라우터/components/RouterInfoComponent.vue";
 import MemberView from "@/components/08_라우터/components/MemberView.vue";
+import QueryStringComponent from "../components/QueryStringComponent.vue";
+import MemberList from "../components/MemberList.vue";
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -19,6 +21,8 @@ const router = createRouter({
     { path: "/route", component: RouteInfoComponent },
     { path: "/router", component: RouterInfoComponent },
     { path: "/dynamicpath/:id", component: MemberView },
+    { path: "/querystring", component: QueryStringComponent },
+    { path: "/memberList", component: MemberList },
   ],
 });
 
