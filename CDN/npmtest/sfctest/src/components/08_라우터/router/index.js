@@ -14,6 +14,8 @@ import RouterInfoComponent from "@/components/08_라우터/components/RouterInfo
 import MemberView from "@/components/08_라우터/components/MemberView.vue";
 import QueryStringComponent from "../components/QueryStringComponent.vue";
 import MemberList from "../components/MemberList.vue";
+import NamedComponents from "../components/namedComponents/NamedComponents.vue";
+import NamedPropsComponent from "../components/namedComponents/NamedPropsComponent.vue";
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -23,6 +25,20 @@ const router = createRouter({
     { path: "/dynamicpath/:id", component: MemberView },
     { path: "/querystring", component: QueryStringComponent },
     { path: "/memberList", component: MemberList },
+    { path: "/namedtest", name: "namedtest", component: NamedComponents },
+    // props 데이터는 props속성을 이용해서 대입
+    {
+      path: "/namedpropstest",
+      name: "namedprops",
+      component: NamedPropsComponent,
+      props: { test: true, test1: false, test2: "나의 정보 출력" },
+    },
+    // 동적 경로 설정하기
+    {
+      path: "/nameddypath/:test",
+      name: "nameddytest",
+      component: NamedPropsComponent,
+    },
   ],
 });
 
