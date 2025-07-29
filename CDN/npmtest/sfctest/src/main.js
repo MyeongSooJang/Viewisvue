@@ -16,8 +16,15 @@ import GlobalComponent from "./components/01_생성_이용/02_GlobalComponent.vu
 // import DynamicComponent from "./07_slot다수컴포넌트/DynamicComponent.vue";
 // createApp(DynamicComponent).mount("#app");
 
-import RouteApp from "./RouteApp.vue";
-import router from "./components/08_라우터/router";
-const app = createApp(RouteApp);
+// import RouteApp from "./RouteApp.vue";
+// import router from "./components/08_라우터/router";
+// const app = createApp(RouteApp);
+// app.use(router);
+// app.mount("#app");
+
+import CompositionApp from "./CompositionApp.vue";
+import router from "@/components/09_composition/router";
+
+const app = createApp(CompositionApp);
 app.use(router);
 app.mount("#app");

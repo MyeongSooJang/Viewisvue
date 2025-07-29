@@ -16,6 +16,10 @@ import QueryStringComponent from "../components/QueryStringComponent.vue";
 import MemberList from "../components/MemberList.vue";
 import NamedComponents from "../components/namedComponents/NamedComponents.vue";
 import NamedPropsComponent from "../components/namedComponents/NamedPropsComponent.vue";
+import NamedDefaultComponent from "../components/namedComponents/NamedDefaultComponent.vue";
+import NamedRouterA from "../components/namedComponents/NamedRouterA.vue";
+import NamedRouteB from "../components/namedComponents/NamedRouteB.vue";
+import NotFoundComponent from "../components/common/error/NotFoundComponent.vue";
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -39,7 +43,51 @@ const router = createRouter({
       name: "nameddytest",
       component: NamedPropsComponent,
     },
+    // 중첩 라우터 설정하기
+    {
+      path: "/members",
+      component: MemberList,
+      children: [
+        { path: ":id", component: MemberView },
+        {
+          path: "named",
+          component: NamedComponents,
+        },
+      ],
+    },
+    // 다수 컴포넌트 설정하기
+    {
+      path: "/usecomponents",
+      name: "usecomponents",
+      components: {
+        default: NamedDefaultComponent,
+        test: NamedRouterA,
+        test2: NamedRouteB,
+        proptest: NamedPropsComponent,
+      },
+      props: {
+        proptest: {
+          test: true,
+          test1: true,
+          test2: "우와",
+        },
+      },
+    },
+    //등록되지 않은 주소 예외처리
+    { path: "/:pathMath(.*)*", component: NotFoundComponent },
   ],
-});
+}); // router 객체 생성
 
-export default router;
+// //네비게이션가드 설정
+// router.beforeEach((to, from) => {
+//   console.log(to);
+//   console.log(from);
+//   // false를 반환하면 이동 중단
+//   const token = sessionStorage.getItem("token");
+//   return token.length != null;
+// });
+// router.afterEach((to, from, fail) => {
+//   console.log(fail);
+// });
+
+// export default router;
