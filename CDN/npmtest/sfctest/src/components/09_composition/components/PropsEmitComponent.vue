@@ -7,12 +7,15 @@
       @child-event="increament"
     />
     <h3>{{ count }}</h3>
+    <h3>{{ mydata }}</h3>
   </div>
 </template>
 
 <script setup>
 import PropsChildComponent from "./PropsChildComponent.vue";
-import { ref } from "vue";
+import { ref, inject } from "vue";
+
+const mydata = inject("mydata");
 const count = ref(0);
 const increament = (su) => {
   count.value += su;

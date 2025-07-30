@@ -13,9 +13,13 @@
 
 <script>
 import { RouterView } from "vue-router";
+//provide
+// provide hooks를 이용
+import { provide } from "vue";
 
 export default {
   setup() {
+    provide("mydata", { name: "bsyoo", value: "love" });
     const nav = [
       {
         label: "반응성 데이터활용",

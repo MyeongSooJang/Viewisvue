@@ -11,13 +11,15 @@
     <h2>emit이용하기</h2>
     <p>defineEmits함수를 이용해서 등록</p>
     <button @click="handler">increment</button>
+    <p>{{ mydata }}</p>
   </div>
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from "vue";
+import { defineProps, defineEmits, inject } from "vue";
 const props = defineProps(["test", "data"]);
 const emits = defineEmits(["childEvent"]);
+const mydata = inject("mydata");
 const handler = () => {
   //$emit
   emits("childEvent", 1);

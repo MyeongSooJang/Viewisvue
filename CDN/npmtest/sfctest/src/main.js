@@ -22,9 +22,18 @@ import GlobalComponent from "./components/01_생성_이용/02_GlobalComponent.vu
 // app.use(router);
 // app.mount("#app");
 
-import CompositionApp from "./CompositionApp.vue";
-import router from "@/components/09_composition/router";
+// import CompositionApp from "./CompositionApp.vue";
+// import router from "@/components/09_composition/router";
 
-const app = createApp(CompositionApp);
+// const app = createApp(CompositionApp);
+// app.use(router);
+// app.mount("#app");
+
+import router from "./components/10_pinia/router";
+import PiniaApp from "./PiniaApp.vue";
+//pinia함수 가져오기
+import { createPinia } from "pinia";
+const app = createApp(PiniaApp);
 app.use(router);
+app.use(createPinia());
 app.mount("#app");
